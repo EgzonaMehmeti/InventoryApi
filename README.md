@@ -1,22 +1,25 @@
 Inventory System
 
-A simple product inventory management system built with .NET 9 Web API, Entity Framework Core, SQL Server.
+A simple product inventory management system built with .NET 9 Web API, Entity Framework Core, SQL Server, and Angular.
 
-Technologies:
+Technologies
 .NET 9
 ASP.NET Core Web API
 Entity Framework Core
 SQL Server
+Angular
+TypeScript
 Swagger / OpenAPI
-Backend Setuп
-
-Prerequisites:
+Backend Setup
+Prerequisites
 
 Make sure the following are installed:
 
 Visual Studio 2022
 .NET 9 SDK
 SQL Server LocalDB
+Node.js and npm
+Angular CLI
 1. Clone the repository
 git clone <repository-url>
 cd InventorySystem
@@ -77,6 +80,55 @@ https://localhost:<port>/swagger
 
 Swagger provides an interactive interface for testing the API endpoints.
 
+Frontend Setup
+1. Navigate to the Angular project
+
+Open a terminal in the frontend directory:
+
+cd inventory-client
+2. Install dependencies
+
+Run:
+
+npm install
+3. Configure the API URL
+
+The Angular application uses an environment configuration for the backend API URL.
+
+Update:
+
+src/environments/environment.ts
+
+with the URL of the running InventoryApi backend:
+
+export const environment = {
+  apiUrl: 'https://localhost:<port>/api'
+};
+
+Replace <port> with the HTTPS port used by the backend.
+
+4. Start the frontend
+
+Run:
+
+ng serve
+
+The Angular application will be available at:
+
+http://localhost:4200
+Database Configuration Summary
+Application
+    ↓
+Angular
+    ↓
+.NET 9 Web API
+    ↓
+Entity Framework Core
+    ↓
+SQL Server LocalDB
+    ↓
+InventoryDb
+
 The database schema is managed using Entity Framework Core migrations.
 
 API
@@ -100,3 +152,5 @@ SQL Server
 Input validation
 Global exception handling
 Swagger documentation
+
+The Angular frontend project has been created and configured to communicate with the backend API. The full product management UI is planned for the frontend implementation.
