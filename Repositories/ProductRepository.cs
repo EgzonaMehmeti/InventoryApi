@@ -14,9 +14,39 @@ namespace InventoryApi.Repositories
             _context = context;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<(List<Product> Items, int TotalItems)> GetPagedAsync(int page, int pageSize, string? name, string? category)
         {
-            return await _context.Products.ToListAsync();
+            var query = _context.Products
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                name = name.Trim();
+
+                query = query.Where(p =>
+                    p.Name.Contains(name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                category = category.Trim();
+
+                query = query.Where(p =>
+                    p.Category != null &&
+                    p.Category.Contains(category));
+            }
+
+            query = query.OrderBy(p => p.Id);
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalItems);
         }
 
         public async Task<Product?> GetByIdAsync(int id)

@@ -4,7 +4,7 @@ namespace InventoryApi.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        Task<List<Product>> GetAllAsync();
+        Task<(List<Product> Items, int TotalItems)> GetPagedAsync(int page, int pageSize, string? name, string? category);
 
         Task<Product?> GetByIdAsync(int id);
 

@@ -14,11 +14,24 @@ namespace InventoryApi.Services
             _repository = repository;
         }
 
-        public async Task<List<ProductResponseDto>> GetAllAsync()
+        public async Task<PagedResultDto<ProductResponseDto>> GetPagedAsync(int page, int pageSize, string? name, string? category)
         {
-            var products = await _repository.GetAllAsync();
+            var (products, totalItems) = await _repository.GetPagedAsync(page, pageSize, name, category);
 
-            return products.Select(MapToResponseDto).ToList();
+            var totalPages = (int)Math.Ceiling(
+                totalItems / (double)pageSize);
+
+            return new PagedResultDto<ProductResponseDto>
+            {
+                Items = products
+                    .Select(MapToResponseDto)
+                    .ToList(),
+
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = totalPages
+            };
         }
 
         public async Task<ProductResponseDto?> GetByIdAsync(int id)

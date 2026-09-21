@@ -4,7 +4,7 @@ namespace InventoryApi.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<List<ProductResponseDto>> GetAllAsync();
+        Task<PagedResultDto<ProductResponseDto>> GetPagedAsync(int page, int pageSize, string? name, string? category);
 
         Task<ProductResponseDto?> GetByIdAsync(int id);
 

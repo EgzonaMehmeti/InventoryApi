@@ -16,11 +16,27 @@ namespace InventoryApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductResponseDto>>> GetAll()
+        public async Task<ActionResult<PagedResultDto<ProductResponseDto>>> GetAll(int page=1, int pageSize=10, string? name = null, string? category = null)
         {
-            var products = await _service.GetAllAsync();
+            if (page < 1)
+            {
+                return BadRequest(new
+                {
+                    message = "Page must be greater than 0."
+                });
+            }
 
-            return Ok(products);
+            if (pageSize < 1 || pageSize > 100)
+            {
+                return BadRequest(new
+                {
+                    message = "PageSize must be between 1 and 100."
+                });
+            }
+
+            var result = await _service.GetPagedAsync(page, pageSize, name, category);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
